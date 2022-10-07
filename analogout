@@ -1,0 +1,59 @@
+// Allein für diesen Zustand verantwortlich: KSMA
+
+
+#include <LiquidCrystal.h>
+
+LiquidCrystal lcd(22,23,24,25,26,27);
+
+int volt_Out = 0;
+int volt_In = 0;
+
+const int RC_PIN = 12;
+
+void setup() {
+  Serial.begin(9600);
+  lcd.begin(16,2);
+  lcd.setCursor(0,0);
+  lcd.print("Aufgabe 15 KSMA");
+  lcd.setCursor(0,1);
+  lcd.print("Analoge Ausgänge");
+
+  delay(1000);
+
+  pinMode(RC_PIN, OUTPUT);
+  
+  lcd.setCursor(0,0);
+  lcd.print("Ausgang: ");
+  lcd.setCursor(0,1);
+  lcd.print("Eingang: ");
+}
+
+
+void loop() {
+  volt_Out = analogRead(15);
+ 
+  volt_Out = map(volt_Out, 0, 1024, 0, 255);
+   analogWrite(RC_PIN, volt_Out);
+
+  volt_Out = map(volt_Out, 0, 255, 0, 500);
+  float volt_print = volt_Out;
+  volt_print = volt_print/100;
+
+   
+  lcd.setCursor(9,0);
+  lcd.print(volt_print);
+  lcd.print(" V    ");
+
+  volt_In = analogRead(13);
+  volt_In = map(volt_In, 0, 1024, 0, 500);
+
+  float volt_inprint = volt_In;
+  volt_inprint = volt_inprint/100;
+
+  lcd.setCursor(9,1);
+  lcd.print(volt_inprint);
+  lcd.print(" V    ");
+
+  delay(200);
+}
+
